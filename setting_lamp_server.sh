@@ -32,28 +32,9 @@ fi
 echo "cd /usr/local/src/"
 cd /usr/local/src/
 
-echo "yum -y install ntp vim"
-yum -y install ntp vim
+echo "yum -y install ntp vim wget"
+yum -y install ntp vim wget
 
-
-# タイムゾーンの確認と変更
-echo "日付表示の変更前確認"
-date
-cp -p /usr/share/zoneinfo/Japan /etc/localtime
-echo "日付表示の変更後確認"
-date
-
-# vim /etc/sysconfig/i18n
-# LANG="ja_JP.UTF-8"
-# source /etc/sysconfig/i18n 
-# echo $LANG
-
-#  vi ~/.bash_profile
-# 最終行に追記
-# LANG=ja_JP.UTF-8
-# export LANG
-# source ~/.bash_profile 
-# echo $LANG 
 
 echo "# disable SELinux"
 echo "## SELinux 設定変更前確認"
@@ -82,53 +63,8 @@ date
 #echo "Press Enter"
 #read Enter
 
-echo "## Setup for root env"
-echo "# Get .bashrc"
-cd ~/
-wget --no-check-certificate https://raw.github.com/nouphet/dotfiles/master/dot.bashrc_for_CentOS
-if [ -f .bashrc ]; then
-	mv .bashrc .bashrc_`date +%Y%m%d%H%M%S`.org
-fi
-mv dot.bashrc_for_CentOS .bashrc
-ls -l ~/.bashrc
-#echo "Press Enter"
-#read Enter
 
-echo "# get Git Config files"
-cd ~/
-wget --no-check-certificate https://raw.github.com/nouphet/dotfiles/master/dot.gitconfig
-if [ -f .gitconig ]; then
-	mv .gitconfig .gitconfig_`date +%Y%m%d%H%M%S`
-fi
-mv dot.gitconfig ~/.gitconfig
-ls -l ~/.gitconfig
-#echo "Press Enter"
-#read Enter
-
-#echo "# setup sudo"
-#visudo
-#echo "Press Enter"
-#read Enter
-
-
-echo "## install dstat"
-
-if [ `rpm -q dstat` == "dstat-0.7.2-1.el5.rfx" ]; then
-        echo "`rpm -q dstat` がインストールされています。"
-else
-        echo "dstat-0.7.2-1.el5.rfx 以外のバージョン (`rpm -q dstat`) がインストールされています。"
-        echo "`rpm -q dstat` をアンインストールして、dstat-0.7.2-1.el5.rfx.noarch.rpm をインストールします。"
-
-        rpm -e dstat
-        cd /usr/local/src/
-        wget ftp://ftp.univie.ac.at/systems/linux/dag/redhat/el5/en/x86_64/extras/RPMS/dstat-0.7.2-1.el5.rfx.noarch.rpm
-        rpm -ivh dstat-0.7.2-1.el5.rfx.noarch.rpm
-fi
-
-#echo "Press Enter"
-#read Enter
-
-echo "## add epel repository for CentOS 4 or 5 or 6"
+echo "## add epel repository for CentOS 6"
 if [ -f /etc/redhat-release ]
 then
     CHK=`egrep "CentOS release 6|Red Hat Enterprise Linux .* 6|Red Hat Enterprise Linux ES release 6" /etc/redhat-release`
@@ -170,39 +106,13 @@ then
                 rpm -ivh epel-release-6-8.noarch.rpm
             fi
         fi
-        # Stop Services for CentOS 6
         chkconfig cups off
     fi
 fi
-#echo "Press Enter"
-#read Enter
 
-echo "yum --enablerepo=epel -y install screen git tree ack etckeeper bash-completion"
-yum --enablerepo=epel -y install screen git tree ack etckeeper bash-completion
-#echo "Press Enter"
-#read Enter
 
-cd /etc
-etckeeper init
-#etckeeper pre-commit
-#etckeeper pre-install
-etckeeper post-install
-etckeeper commit
-#echo "Press Enter"
-#read Enter
-
-if [ `gem list -i rak` == "false" ]; then
-    echo "rak をインストールします。"
-    #gem install rak
-    gem install rak --version "~>1.4"
-    #echo "Press Enter"
-    #read Enter
-else
-    echo "下記の rak がインストールされています。"
-    gem list -d "rak"
-fi
-echo ""
-
+# ソース管理をgitで行う前提でgitをインストール
+# SVNを使用する場合は不要
 echo "# define git"
 git config --global core.editor 'vim -c "set fenc=utf-8"'
 git config --global http.sslVerify false
@@ -235,4 +145,3 @@ echo "サーバをリブートして下さい。"
 echo "コマンドを実行してください。 reboot"
 #echo "Press Enter"
 #read Enter
-
