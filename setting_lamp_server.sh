@@ -125,6 +125,17 @@ chkconfig httpd on
 chkconfig httpd --list
 /etc/init.d/httpd start
 
+echo "iptablesを停止します。"
+/etc/init.d/iptables stop
+
+# phpの情報一覧を出力するファイルを生成
+cat << _EOT_ > /var/www/html/phpinfo.php
+<?php
+phpinfo();
+?>
+_EOT_
+
+
 echo "MySQL Serverをインストールします。"
 yum -y install mysql-server
 chkconfig mysqld on
