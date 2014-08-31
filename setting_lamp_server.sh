@@ -71,52 +71,6 @@ date
 #read Enter
 
 
-echo "## add epel repository for CentOS 6"
-if [ -f /etc/redhat-release ]
-then
-    CHK=`egrep "CentOS release 6|Red Hat Enterprise Linux .* 6|Red Hat Enterprise Linux ES release 6" /etc/redhat-release`
-    if [ "$CHK" != '' ]
-    then
-        if [ `uname -a | grep x86_64 | awk '{ print $12 }'` == "x86_64" ]
-        then
-            echo ""
-            echo "#########################################################################"
-            echo "RHEL 6.x / CentOS 6.x / OEL 6.x x86_64 が検出されました。"
-            echo "#########################################################################"
-            echo "# add epel repository for CentOS 6 64bit"
-            if [ `rpm -q epel-release` == "epel-release-6-8" ]
-            then
-                echo "`rpm -q epel-release`がインストール済みです。"
-                echo "Go To Next."
-                echo ""
-            else
-                echo "epel-release-6-8.noarch.rpmをインストールします。"
-                cd /usr/local/src/
-                wget http://ftp.riken.jp/Linux/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
-                rpm -ivh epel-release-6-8.noarch.rpm
-            fi
-        else
-            echo ""
-            echo "#########################################################################"
-            echo "RHEL 6.x / CentOS 6.x / OEL 6.x 386 が検出されました。"
-            echo "#########################################################################"
-            echo "# add epel repository for CentOS 6 32bit"
-            if [ `rpm -q epel-release` == "epel-release-6-8" ]
-            then
-                echo "`rpm -q epel-release`がインストール済みです。"
-                echo "Go To Next."
-                echo ""
-            else
-                echo "epel-release-6-8.noarch.rpmをインストールします。"
-                cd /usr/local/src/
-                wget http://ftp.riken.jp/Linux/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
-                rpm -ivh epel-release-6-8.noarch.rpm
-            fi
-        fi
-    fi
-fi
-
-
 # ソース管理をgitで行う前提でgitをインストール
 # SVNを使用する場合は不要
 echo "# define git"
