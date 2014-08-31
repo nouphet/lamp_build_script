@@ -71,14 +71,6 @@ date
 #read Enter
 
 
-# ソース管理をgitで行う前提でgitをインストール
-# SVNを使用する場合は不要
-echo "# define git"
-git config --global core.editor 'vim -c "set fenc=utf-8"'
-git config --global http.sslVerify false
-#echo "Press Enter"
-#read Enter
-
 echo "ApacheとPHPをインストールします。"
 yum -y install httpd php php-cli php-curl php-pear php-mysql php-imagick curl imagemagick
 chkconfig httpd on
