@@ -4,15 +4,22 @@
 # Auther: Toshihiro Takehara aka nouphet
 # All rights reserved - Do Not Redistribute
 
+## 処理開始のメッセージ
+echo "#########################################################################"
+echo "LAMP環境の構成を開始します。"
+echo `date`
+echo "#########################################################################"
+
+
 ## パラメータの設定
 ### Set to Apache HTTP Server
-SITE_DOMAIN="sample-domein.com"
+SITE_DOMAIN="sample-domain.com"
 
 ### Set to MySQL Server
-DB_NAME="sample-domein"
-DB_ROOT_PASSWORD="P@ssword"
+DB_NAME="sample-domain"
+DB_ROOT_PASSWORD="P@ssw0rd"
 DB_USER_NAME="dbuser"
-DB_USER_PASSWORD="P@ssword"
+DB_USER_PASSWORD="P@ssw0rd"
 
 # ユーザのチェック
 USER=`whoami`
@@ -32,8 +39,8 @@ fi
 echo "cd /usr/local/src/"
 cd /usr/local/src/
 
-echo "yum -y install ntp vim wget"
-yum -y install ntp vim wget
+echo "yum -y install wget ntp vim"
+yum -y install wget ntp vim
 
 
 echo "# disable SELinux"
@@ -106,7 +113,6 @@ then
                 rpm -ivh epel-release-6-8.noarch.rpm
             fi
         fi
-        chkconfig cups off
     fi
 fi
 
@@ -120,13 +126,15 @@ git config --global http.sslVerify false
 #read Enter
 
 echo "ApacheとPHPをインストールします。"
-yum -y install httpd php php-cli php-curl php-pear mysql-server php-mysql curl imagemagick php-imagick
+yum -y install httpd php php-cli php-curl php-pear php-mysql php-imagick curl imagemagick
 chkconfig httpd on
 chkconfig httpd --list
 /etc/init.d/httpd start
 
 echo "iptablesを停止します。"
 /etc/init.d/iptables stop
+chkconfig iptables off
+chkconfig iptables --list
 
 # phpの情報一覧を出力するファイルを生成
 cat << _EOT_ > /var/www/html/phpinfo.php
@@ -148,11 +156,15 @@ echo "MySQL Serverを初期設定します。"
 /usr/bin/mysqladmin -u root password $DB_ROOT_PASSWORD
 /usr/bin/mysqladmin -u root -p$DB_ROOT_PASSWORD -h localhost.localdomain password $DB_ROOT_PASSWORD
 
+## 処理終了のメッセージ
+echo "#########################################################################"
 echo "# finishing message"
+echo `date`
 echo ""
+echo "iptablesは停止されています。"
 echo "iptablesを必要に応じて設定して下さい。"
 echo ""
+echo "SELinuxの設定を変更しています。"
 echo "サーバをリブートして下さい。"
 echo "コマンドを実行してください。 reboot"
-#echo "Press Enter"
-#read Enter
+echo "#########################################################################"
