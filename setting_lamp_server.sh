@@ -13,13 +13,12 @@ echo "#########################################################################"
 
 ## パラメータの設定
 ### Set to Apache HTTP Server
-SITE_DOMAIN="sample-domain.com"
 
 ### Set to MySQL Server
 DB_NAME="sample-domain"
 DB_ROOT_PASSWORD="P@ssw0rd"
-DB_USER_NAME="dbuser"
-DB_USER_PASSWORD="P@ssw0rd"
+#DB_USER_NAME="dbuser"
+#DB_USER_PASSWORD="P@ssw0rd"
 
 # ユーザのチェック
 USER=`whoami`
